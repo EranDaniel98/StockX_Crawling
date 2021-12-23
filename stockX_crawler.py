@@ -3,8 +3,6 @@ import pandas as pd
 import requests
 import json
 
-from requests.api import head
-
 #python -m json.tool my_json.json
 
 class StockX_crawler:

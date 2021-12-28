@@ -16,7 +16,7 @@
 		"TE": "trailers"
 	},
 	
-	"brands":
+	"brands_urls":
 	{
 		"adidas" : "https://stockx.com/adidas",
 		"Air Jordan": "https://stockx.com/retro-jordans",
@@ -27,4 +27,6 @@
 		"Luxury Brands": "https://stockx.com/luxury-brands",
 		"Collections": "https://stockx.com/collections"
 	}
+
+
 }

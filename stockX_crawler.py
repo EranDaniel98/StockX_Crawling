@@ -1,15 +1,14 @@
-from os import close
 from bs4 import BeautifulSoup as bs
 from sklearn.datasets import load_iris
 import pandas as pd
 import requests
-import json
+import json, re
 
 #python -m json.tool my_json.json
 
 class StockX_crawler:
 	def __init__(self):
-		self.retail_prices, self.shoes_name, self.shoes_urls, self.last_sale, self.volality, self.num_of_sales  = [],[],[],[],[],[]
+		self.retail_prices, self.shoes_name, self.shoes_urls, self.last_sale, self.volality, self.num_of_sales, self.avg_sale_price  =[],[],[],[],[],[],[]
 		self.base_url = "https://stockx.com/"
 		self.df = pd.DataFrame()
 
@@ -35,11 +34,20 @@ class StockX_crawler:
 			name = [x.getText() for x in soup.find('h1',{'class':'chakra-heading css-146c51c'})]
 			self.shoes_name = self.shoes_name + [" ".join(name[::len(name) - 1])] #name and color
 
-			self.volality = self.volality + [x.getText() for x in soup.find_all('dd',{'class':'chakra-stat__number css-jcr674'})]
-			self.retail_prices = self.retail_prices + [x.getText() for x in soup.find_all('p',{'class':'chakra-text css-imcdqs'})]
-			self.last_sale = self.last_sale + [x.getText() for x in soup.find_all('p',{'class':'chakra-text css-xfmxd4'})]
+			data_root = soup.find('div',{'class':'css-127g5zj'})
+			children_data = [x.getText() for x in data_root.findChildren('dd',{'class':'chakra-stat__number css-jcr674'})]
+			for i in children_data:
+				print(list(map(lambda x: ''.join(x.split(',')),re.findall('([\d,]+)',i))))
+
+			self.volality = self.volality + [soup.find('dd',{'class':'chakra-stat__number css-jcr674'}).getText()]
+			self.retail_prices = self.retail_prices + [soup.find('p',{'class':'chakra-text css-imcdqs'}).getText()]
+			self.last_sale = self.last_sale + [soup.find('p',{'class':'chakra-text css-xfmxd4'}).getText()]
+			self.num_of_sales = self.num_of_sales + [soup.find('dd',{'class':'chakra-stat__number css-jcr674'}).getText()]
+			self.avg_sale_price = self.avg_sale_price + [soup.find('dd',{'class':'chakra-stat__number css-jcr674'}).getText()]
 		
-		print(self.retail_prices)
+		data =[self.volality, self.retail_prices, self.last_sale, self.num_of_sales, self.avg_sale_price]
+		print(data)
+
 		self.df['Retail Price'] = pd.Series(self.retail_prices)
 		self.df['Shoe Name'] = pd.Series(self.shoes_name)
 		self.df['Last Sale'] = pd.Series(self.last_sale)
@@ -47,7 +55,7 @@ class StockX_crawler:
 	def get_shoes_urls(self, brand_url):
 		max_pages = self.get_max_pages(brand_url)
 
-		for page in range(max_pages + 1):
+		for page in range(1 + 1):
 			page_url = brand_url + f'?page={page + 1}'
 			res = requests.get(page_url, headers=self.headers)
 			print(page_url)

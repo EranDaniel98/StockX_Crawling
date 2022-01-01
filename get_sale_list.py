@@ -26,7 +26,7 @@ class Shoe_data:
             print("Could not locate the pop up window/s")
             
         time.sleep(1)
-        self.driver.execute_script("document.getElementsByClassName('chakra-button css-2yrtpe')[1].click()")
+        self.driver.execute_script("document.getElementsByClassName('chakra-button css-2yrtpe')[2].click()")
         time.sleep(5)
 
         return self.driver.execute_script(self.sales_table_script)
@@ -37,10 +37,22 @@ class Shoe_data:
         
         table = [x.getText() for x in soup.find_all('p',{'class':'chakra-text'})]
         del table[3::5] #remove price tag
-        prices = [i[1:] for i in table[3::4]] #remove $ sign from the price
-        sizes = table[2::4]
-        date_time = " ".join()
-        
+        #print(table)
+        del table[1::4] #remove hour stamp
+        table[::3] = [x for x in zip(table[::3],table[2::3])] # Date
+        del table[2::3]
+        table = table[::-1]
+
+        res = {}
+        for i in table[::2]:
+            res[i] = []
+
+        index = 0
+        for key in table[::2]:
+            res[key].append(table[index+1])
+            index += 2
+
+        print(res['10.5'])            
         
 
 def main():

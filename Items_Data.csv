@@ -1,1 +1,1 @@
-shoes_name	release_date	retail_price	last_sale	volality	shoe_size	sale_date_price	last_hundred_sales	avg_sale_price	12-Month Trade Range	All-Time Trade Range
+shoes_name,release_date,retail_price,last_sale,volality,shoe_size,sale_date_price,avg_sale_price,12-Month Trade Range,All-Time Trade Range

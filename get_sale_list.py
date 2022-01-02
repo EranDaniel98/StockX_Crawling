@@ -1,62 +1,77 @@
+from requests.api import options
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 from selenium_stealth import stealth
+
 from bs4 import BeautifulSoup as bs
-import time, os
+import time, re
 
 class Shoe_data:
-    def __init__(self, shoe_url):
-        self.shoe_url = shoe_url
-
-        self.driver = webdriver.Chrome()
+    def __init__(self):
+        
+        chrome_options = Options()
+        chrome_options.add_argument("--window-size=1920,1080")
+        
+        self.driver = webdriver.Chrome(options=chrome_options)
         stealth(self.driver, languages=["en-US", "en"], vendor="Google Inc.", platform="Win32", webgl_vendor="Intel Inc.", renderer="Intel Iris OpenGL Engine", fix_hairline=True)
 
+        self.close_popup_script = "document.getElementsByClassName('chakra-modal__close-btn')[0].click()"
+        self.view_sales_script = "document.getElementsByClassName('chakra-button css-2yrtpe')[2].click()"
         self.sales_table_script =  'return document.getElementsByClassName("css-aydg0x")[0].innerHTML'
-        self.parse_sales_table()
+        self.scroll_down = "window.scrollTo(0, document.body.scrollHeight)"
+        self.get_historical_data_script = "return document.getElementsByClassName('css-79elbk')[0].innerHTML"
+        self.popup_error_msg = 'Could not locate the pop up window/s'
 
-    def get_all_sales(self):
-        self.driver.get(self.shoe_url)
-        time.sleep(5)
+    def get_all_data(self, shoe_url):
+        self.driver.get(shoe_url)
+        time.sleep(1)
 
         try:
-            self.driver.execute_script("document.getElementsByClassName('chakra-modal__close-btn')[0].click()")
+            self.driver.execute_script(self.close_popup_script)
             time.sleep(1)
-            self.driver.execute_script("document.getElementsByClassName('chakra-modal__close-btn')[0].click()")
+            self.driver.execute_script(self.close_popup_script)
         except:
-            print("Could not locate the pop up window/s")
-            
+            print(self.popup_error_msg)
+        
         time.sleep(1)
-        self.driver.execute_script("document.getElementsByClassName('chakra-button css-2yrtpe')[2].click()")
-        time.sleep(5)
+        
+        self.driver.execute_script( self.scroll_down)
+        time.sleep(2)
+        historical_data = self.driver.execute_script(self.get_historical_data_script)
+        time.sleep(2)
+        self.parse_historical_data(historical_data)
+        
+        time.sleep(1)
+        self.driver.execute_script(self.view_sales_script)
 
-        return self.driver.execute_script(self.sales_table_script)
+        time.sleep(3)
+        sales_table = self.driver.execute_script(self.sales_table_script)
+        self.parse_sales_table(sales_table)
 
-    def parse_sales_table(self):
-        sales_table = self.get_all_sales()
+    def parse_sales_table(self, sales_table):
         soup = bs(sales_table,"html.parser")
         
         table = [x.getText() for x in soup.find_all('p',{'class':'chakra-text'})]
         del table[3::5] #remove price tag
-        #print(table)
         del table[1::4] #remove hour stamp
-        table[::3] = [x for x in zip(table[::3],table[2::3])] # Date
-        del table[2::3]
+        table[::3] = [x for x in zip(table[::3],table[2::3])] # Date and price
+        del table[2::3] #remove price
         table = table[::-1]
 
-        res = {}
-        for i in table[::2]:
-            res[i] = []
+        size_price_dict = {i:[] for i in table[::2]}
 
         index = 0
         for key in table[::2]:
-            res[key].append(table[index+1])
+            size_price_dict[key].append(table[index+1])
             index += 2
 
-        print(res['10.5'])            
-        
+        print(len(size_price_dict))
 
-def main():
-    Shoe_data('https://stockx.com/air-jordan-11-retro-cool-grey-2021')
+    def parse_historical_data(self, history_data):
+        soup = bs(history_data,"html.parser")
 
-if __name__ == "__main__":
-	main()
+        data_root = soup.find('div',{'class':'css-ldihrc'})
+        children_data = [x.getText() for x in data_root.findChildren('dd',{'class':'chakra-stat__number css-jcr674'})]
+        for i in children_data:
+            print(list(map(lambda x: ''.join(x.split(',')),re.findall('([\d,]+)',i))))

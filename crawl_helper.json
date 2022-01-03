@@ -16,6 +16,12 @@
 		"Sec-Fetch-User": "?1",
 		"TE": "trailers"
 	},
+
+	"login_info":
+	{
+		"username": "gezkfir123456789@gmail.com",
+		"password": "5407402177Cc"
+	},
 	
 	"brands_urls":
 	{

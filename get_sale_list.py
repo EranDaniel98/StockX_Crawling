@@ -99,23 +99,21 @@ class Shoe_data:
 
         data_root = soup.find('div',{'class':'css-ldihrc'}) #Find the root tag for historical data table
         children_data = [x.getText() for x in data_root.findChildren('dd',{'class':'chakra-stat__number css-jcr674'})] #list of all the items in table
+        print(children_data)
         
-        self.history_data = list(map(self.fix,self.splitStr(children_data))) #fix values in list - missing vals will be 'None'
+        self.history_data = self.fix_history_data_items(children_data) #fix values in list - missing vals will be 'None'
+        print(self.history_data)
     
-    def splitStr(self, li):
-      res = []
-      for i, item in enumerate(li):
-        match = re.findall('[\$]*([\d,]+)[\%]*',item)
-        if match:
-          res += match
-        else:
-            if i < 2:
-                res += ['NaN']*2
-            else:
-                res += ['NaN']
+    def fix_history_data_items(self, history_list):
+        history_list = [i.split() for i in history_list]
 
-      return res
-
-    def fix(self, s):
-      s =  ''.join([l for l in s.strip() if l.isdigit()])
-      return s if s else 'NaN'
+        res = []
+        for i in history_list:
+            for j in i:
+                j = j.replace('$','')
+                j = j.replace('%','')
+                j = j.replace(',','')
+                j = j.replace('--','NaN')
+                if j != '-':
+                    res.append(j)
+        return res

@@ -7,7 +7,7 @@ from random import choice
 
 class StockX_crawler:
 	def __init__(self):
-		self.release_date, self.row_data, self.brands_urls = [], [], []
+		self.shoes_urls, self.release_date, self.row_data, self.brands_urls = [], [], [], []
 
 		self.base_url = "https://stockx.com"
 		self.df = pd.read_csv('Items_Data.csv')
@@ -17,9 +17,10 @@ class StockX_crawler:
 		with open('shoes_url_list.txt',"r") as f:
 			links = f.readlines()
 
-		shoe_link = choice(links)[:-1] #select ramdom link from the file
-		#shoe_link = links[0][:-1] #Get the first link from file without the '\n' at the end
-		del links[links.index(shoe_link + '\n')] #Remove that link from list
+		#shoe_link = choice(links)[:-1] #select ramdom link from the file
+		#del links[links.index(shoe_link + '\n')] #Remove that link from list
+		shoe_link = links[0][:-1] #Get the first link from file without the '\n' at the end
+		del links[0]
 
 		with open('shoes_url_list.txt',"w") as f:
 			f.writelines(links) #Write the new list to the file
@@ -31,46 +32,10 @@ class StockX_crawler:
 
 		for i in range(5): # 5 shoes at a time
 			shoe_link = self.get_shoe_link()
-			res = requests.get(shoe_link, headers=self.headers)
+			print(f'Getting data from: {shoe_link}')
+			data.get_size_count(shoe_link) #Get all the other data that i cant get with request
 			
-			if(res.status_code != 200): #If the GET requests got an error (403, 400 etc..) 
-				print(res)
-				return 'stop'
-			
-			soup = bs(res.content.decode(), "html.parser")
-			print(f"{res} Getting data from: {shoe_link}")
-
-			name = [x.getText() for x in soup.find('h1',{'class':'chakra-heading css-146c51c'})] #Get shoe name and color as list
-			prod_detail = [x for x in soup.find_all('p',{'class':'chakra-text css-imcdqs'})] #Get product details
-			
-			try:
-				self.shoes_name = [" ".join(name[::len(name) - 1])] #join the name and color
-				self.last_sale = soup.find('p',{'class':'chakra-text css-xfmxd4'}).getText()[1:] #Get last sale
-			except:
-				print(f"Could not get shoe name or last sale data from:{res.url}\n")
-				with open('err.txt','a') as f:
-					f.write(shoe_link + '\n')
-				continue	
-			
-			data.get_all_data(shoe_link) #Get all the other data that i cant get with request
-			
-			try:
-				self.row_data = [self.shoes_name[0], prod_detail[3].getText(), prod_detail[2].getText()[1:], self.last_sale] #name, releaseDate, retailPrice, lastSale
-				self.row_data += [data.history_data[4], None, None, data.history_data[5], data.history_data[7], data.history_data[0], data.history_data[1], data.history_data[2], data.history_data[3]]
-			except:
-				print("Could not get retail price and or release date\n")
-				with open('err.txt','a') as f:
-					f.write(shoe_link + '\n')
-				continue
-
-			for k in data.size_price_dict:
-				self.row_data[5] = k
-				self.row_data[6] = data.size_price_dict[k]
-			
-				df = pd.DataFrame([self.row_data])
-				df.to_csv("Items_Data.csv", header=False,index=False, mode='a')
-
-			print(f"done with {self.shoes_name[0]}, Moving on next\n")
+			print(f"done with {shoe_link}, Moving on next\n")
 		
 	def get_max_pages(self, url):
 		html_page = requests.get(url, headers=self.headers)

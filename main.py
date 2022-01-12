@@ -15,7 +15,7 @@ def main():
 	file_lines_count = crawl.get_file_lines_count('shoes_url_list.txt') #get shoes link len
     
 	while(file_lines_count != 0):
-		if crawl.get_shoes_data() == 'stop': break
+		crawl.get_shoes_data()
 		file_lines_count = crawl.get_file_lines_count('shoes_url_list.txt')
 		
 		print('Finished 5 shoes')

@@ -44,7 +44,7 @@ class Shoe_data:
             print(self.popup_error_msg)
 
         try: #Open size chart and get prices
-            sleep(2)
+            sleep(3)
             self.driver.find_element_by_id('menu-button-pdp-size-selector').click() #Open size chart
             sleep(2)
             size_count = self.driver.execute_script('return document.getElementsByClassName("chakra-menu__menuitem-option").length') #get the amount of sizes in the chart
@@ -55,7 +55,6 @@ class Shoe_data:
 
         except:
             print('Cant open size chart')
-        
 
     def get_all_data(self, size_count):
         for i in range(size_count - 4):
@@ -66,7 +65,8 @@ class Shoe_data:
             if self.get_product_details() == 'skip': #Get product details
                 return
             sleep(1)
-            self.view_last_sales() #View last sales
+            if self.view_last_sales() == 'empty': #View last sales
+                continue 
             self.get_last_sale() #get last sale
             sleep(1)
             self.scroll_down() #scroll down
@@ -76,6 +76,7 @@ class Shoe_data:
 
             self.create_row()
             self.scroll_up()
+            sleep(2)
 
     def select_size(self, size):
         try: #Select the size
@@ -88,11 +89,16 @@ class Shoe_data:
         try:  # Open last sales view and parse it
             self.driver.find_element_by_xpath("//*[contains(text(),'View Sales')]").click()  # View last sales
             sleep(2)
+            
+            is_there_sales = self.driver.find_element_by_class_name('css-aydg0x').get_attribute("innerText")
+            if 'Nothing to see here' in is_there_sales:
+                self.driver.find_element_by_class_name('chakra-modal__close-btn').click()  # Close last sales window
+                return 'empty'
 
             sales_table = self.driver.find_element_by_class_name('css-aydg0x').get_attribute("innerHTML")  # Get last sales HTML
             sleep(1)
-            self.parse_sales_table(sales_table)  # parse last sales HTML
             self.driver.find_element_by_class_name('chakra-modal__close-btn').click()  # Close last sales window
+            self.parse_sales_table(sales_table)  # parse last sales HTML
     
         except:
             print(self.view_sales_error_msg)
@@ -143,6 +149,9 @@ class Shoe_data:
         soup = bs(sales_table, "html.parser")
         table = [x.getText() for x in soup.find_all(
             'p', {'class': 'chakra-text'})]  # remove excess tags
+        
+        if 'Nothing to see here' in table[0]: # No Items
+            return
 
         del table[3::5]  # Remove price tag
         del table[1::4]  # Remove hour stamp

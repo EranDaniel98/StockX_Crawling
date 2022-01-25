@@ -12,7 +12,7 @@ class StockX_crawler:
         self.shoes_urls, self.release_date, self.row_data, self.brands_urls = [], [], [], []
 
         self.base_url = "https://stockx.com"
-        self.df = pd.read_csv('Items_Data.csv')
+        self.df = pd.read_csv('./csv_files/Items_Data.csv')
         self.headers = self.get_request_params()
 
     def get_shoe_link(self):
@@ -68,8 +68,7 @@ class StockX_crawler:
 
         with open('shoes_url_list.txt', 'w') as f:
             # Write all links to shoes_url_list.txt
-            f.writelines(
-                [self.base_url + link + '\n' for link in self.shoes_urls])
+            f.writelines([self.base_url + link + '\n' for link in self.shoes_urls])
 
     def get_brand_urls(self):
         f = open('crawl_helper.json')

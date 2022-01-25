@@ -1,5 +1,4 @@
 from selenium import webdriver
-import selenium
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium_stealth import stealth
@@ -181,11 +180,9 @@ class Shoe_data:
         data_root = soup.find('div', {'class': 'css-ldihrc'})
         children_data = [x.getText() for x in data_root.findChildren(
             'dd', {'class': 'chakra-stat__number css-jcr674'})]  # list of all the items in table
-        #print(children_data)
 
         # fix values in list - missing vals will be 'None'
         self.history_data = self.fix_history_data_items(children_data)
-        #print(self.history_data)
 
     def fix_history_data_items(self, history_list):
         history_list = [i.split() for i in history_list]
@@ -205,7 +202,6 @@ class Shoe_data:
         self.last_sale = self.shoe_name = self.release_date = self.retail_price = self.history_data = []
         self.size_price_dict = {}
 
-
     def create_row(self):
         row = [self.shoe_name, self.release_date, self.retail_price, self.last_sale]
         # Volality, size, avg price size, number of sales, price premium, avg sale price, min range
@@ -218,5 +214,5 @@ class Shoe_data:
         print(row)
         
         df = pd.DataFrame([row])
-        df.to_csv("Items_Data.csv", header=False,index=False, mode='a')
+        df.to_csv("./csv_files/Items_Data.csv", header=False,index=False, mode='a')
         self.clean_var()

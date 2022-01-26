@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stockx Website</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+      integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- NavBar Section  -->
+    <nav class="navbar">
+      <div class="navbar__container">
+        <a href="/" id="navbar__logo"
+          ><i class="far fa-gem"></i>StockX CrawleR</a
+        >
+        <div class="navbar__toggle" id="moblie-menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+        <ul class="navbar__menu">
+          <li class="navbar__item">
+            <a href="/" class="navbar__links">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/data.html" class="navbar__links">Data</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/tech.html" class="navbar__links">Tech</a>
+          </li>
+          <li class="navbar__btn">
+            <a href="/prediction.html" class="button">Prediction</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="main">
+      <div class="main__container">
+        <div class="main__content">
+          <h1>ACCURATE PREDICTION</h1>
+          <h2>OF PRICES</h2>
+          <p>
+            Using The Renowned Random Forest Regressor, Our Model Is Able To
+            Predict Prices With 81% R2 Score
+          </p>
+          <!-- <button class="main__btn"><a href="/prediction.html">Get Started</a></button> -->
+        </div>
+        <div class="main__img--container">
+          <img src="images/pic2.svg" alt="pic" id="main__img" />
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <!-- forms under "services" Section -->
+    <div class="services">
+      <h1>
+        Input desired sneaker URL, Press enter and let the magic happen...
+      </h1>
+        <form action="/get-text" method="POST" >
+          <input
+            id="userinput"
+            placeholder="Search.."
+            style="height: 80px; font-size: 44pt"
+            type="text"
+            name="input_url"
+            size="50"
+            maxlength="500"
+            value="Example: https://stockx.com/nike-dunk-low-georgetown"
+          />
+          
+        </form>
+    </div>
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript">
+     $(document).ready(function() {
+          $('#quan').keydown(function(event) {
+              if (event.keyCode == 13) {
+                  var url_=$('#quan').val();
+                  alert(url_);
+                  // Use this 'model' variable
+              }
+          });
+     });
+    </script> -->
+    
+    </body>
+    </html>
+    
+    <script src="app.js"></script>
+  </body>
+</html>

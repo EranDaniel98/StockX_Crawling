@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stockx Website</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/static/styles.css" />
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
@@ -21,7 +21,7 @@
     <!-- NavBar Section  -->
     <nav class="navbar">
       <div class="navbar__container">
-        <a href="/" id="navbar__logo"
+        <a href="./index.html" id="navbar__logo"
           ><i class="far fa-gem"></i>StockX CrawleR</a
         >
         <div class="navbar__toggle" id="moblie-menu">
@@ -31,16 +31,16 @@
         </div>
         <ul class="navbar__menu">
           <li class="navbar__item">
-            <a href="/" class="navbar__links">Home</a>
+            <a href="./index.html" class="navbar__links">Home</a>
           </li>
           <li class="navbar__item">
-            <a href="data.html" class="navbar__links">Data</a>
+            <a href="./data.html" class="navbar__links">Data</a>
           </li>
           <li class="navbar__item">
-            <a href="tech.html" class="navbar__links">Tech</a>
+            <a href="./tech.html" class="navbar__links">Tech</a>
           </li>
           <li class="navbar__btn">
-            <a href="prediction.html" class="button">Prediction</a>
+            <a href="http://127.0.0.1:5001/" class="button">Prediction</a>
           </li>
         </ul>
       </div>
@@ -50,34 +50,29 @@
     <div class="main">
       <div class="main__container">
         <div class="main__content">
-          <h1>DATA</h1>
-          <h2>COLLECTION PREDICTION</h2>
-          <p>By Eran Daniel & Kfir Gez.</p>
-          <button class="main__btn"><a href="prediction.html">Get Starterd</a></button>
+          <h1>REGRESSOR</h1>
+          <h2>HIGHLIGHTS</h2>
+          <p>Visual Representation Of Our Models Pattern Detection Capabilities </p>
         </div>
         <div class="main__img--container">
-          <img src="images/pic1.svg" alt="pic" id="main__img" />
+          <img src="/images/pic3.svg" alt="pic" id="main__img" />
         </div>
       </div>
     </div>
 
-    <!-- Services Section -->
-    <div class="services">
-      <h1>See what the hype is about</h1>
-      <div class="services__container">
-        <div class="services__card">
-          <h2>Our vast sneaker DataFrame</h2>
-          <p>Neatly orgenized, sorted and clean </p>
-          <button><a href="data.html">Have a look!</a></button>
+    <!-- pics Section -->
+    <div class="pics">
+      <h1>"A correlation is never enough to argue that one thing is causing another" ― Matt Parker</h1>
+      <div class="pics__container">
+        <div class="pics__card">
+          <h2>All of the correlations</h2>
         </div>
-        <div class="services__card">
-          <h2>Data correlations made simple</h2>
-          <p>Powered by Seaborn's statistical data visualization</p>
-          <button><a href="tech.html">Understand the workings</a></button>
+        <div class="pics__card">
+          <h2>Highly correlated columns</h2>
         </div>
       </div>
     </div>
     
-    <script src="app.js"></script>
+    <script src="/static/app.js"></script>
   </body>
 </html>

@@ -34,7 +34,7 @@ class Shoe_data:
         self.history_data = []  # Reset the list to empty
         
         self.driver.get(shoe_url)
-        sleep(2)
+        sleep(3)
         try:  # Try to close the popups
             self.driver.execute_script(self.close_popup_script)
             sleep(3)
@@ -214,5 +214,5 @@ class Shoe_data:
         print(row)
         
         df = pd.DataFrame([row])
-        df.to_csv("./csv_files/Items_Data.csv", header=False,index=False, mode='a')
+        df.to_csv(".//csv_files/Items_Data.csv", header=False,index=False, mode='a')
         self.clean_var()

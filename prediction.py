@@ -23,15 +23,16 @@ class predict:
         self.gb_model = None
         
         if processed_df is None:
-            self.factorize_dict = {}
             self.df = self.get_dataframe()
-            self.df = self.df.drop('avg_size_price', axis = 1)
-            self.df = self.df.replace('', np.nan)
         else:
             self.df = pd.read_csv(processed_df)
+        
+        self.factorize_dict = {}
+        self.df = self.df.drop('avg_size_price', axis = 1)
+        self.df = self.df.replace('', np.nan)
 
     def get_dataframe(self):    
-        return pd.read_csv('./csv_files/Items_Data.csv')
+        return pd.read_csv('.//csv_files/Items_Data.csv')
 
     def replace_price_premium(self): # Calc the price premium by formula and replace the current values
         retail_prices = self.df['retail_price']
@@ -52,7 +53,13 @@ class predict:
         format = '%d/%m/%Y'
         
         for index, date in enumerate(shoe_dates):
-            shoe_date = datetime.datetime.strptime(date, format)
+            try:
+                date_list = date.split('/')
+                shoe_date = datetime.datetime.strptime(date, format)
+            except:
+                date = '/'.join([date_list[1],date_list[0],date_list[2]])
+                shoe_date = datetime.datetime.strptime(date, format)
+
             diff = todays_date - shoe_date
             self.df['release_date'].iloc[index] = diff.days
 
@@ -69,13 +76,12 @@ class predict:
 
         #turn unique names into numerics 
         self.df.sort_values(by=['shoes_name'])
-        self.df.to_csv('half_procc_df.csv', index=False)
+        self.df.to_csv('.//csv_files/half_procc_df.csv', index=False)
         self.factorize_2()
-        self.df.to_csv('proccessed_dataframe.csv', index=False)
+        self.df = pd.read_csv('.//csv_files/proccessed_dataframe.csv')
     
     def factorize_2(self):
         unique_vals = self.df['shoes_name'].unique()
-        print(len(unique_vals))
         #Setting up the dict
         for i in unique_vals:
             self.factorize_dict[i] = 0
@@ -89,8 +95,7 @@ class predict:
         for i in range(len(self.df['shoes_name'])):
             self.df['shoes_name'].iloc[i] = self.factorize_dict[self.df['shoes_name'].iloc[i]]
         
-        self.df.to_csv('proccessed_dataframe.csv', index=False)
-        self.df = pd.read_csv('./csv_files/proccessed_dataframe.csv')
+        self.df.to_csv('.//csv_files/proccessed_dataframe.csv', index=False)
 
 ######################################################### Check Correlation  ###########################################################
 
@@ -226,22 +231,3 @@ class predict:
         return rf_y_pred
 
 ######################################################### END OF CLASS  ################################################################
-def fix_dates():
-
-    with open('project_dates/all_dates.txt') as f:
-        all_dates = f.readlines()
-    
-    with open('project_dates/bad_dates.txt') as f:
-        bad_dates = f.readlines()
-    
-    with open('project_dates/fixed_bad_dates.txt') as f:
-        fixed_bad_dates = f.readlines()
-    
-    k = 0
-    for i in bad_dates:
-        if i in all_dates:
-            all_dates[all_dates.index(i)] = fixed_bad_dates[k]
-            k += 1 
-    
-    with open('fixed_dates.txt','w') as f:
-        f.writelines(all_dates)

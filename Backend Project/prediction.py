@@ -32,7 +32,7 @@ class predict:
         self.df = self.df.replace('', np.nan)
 
     def get_dataframe(self):    
-        return pd.read_csv('./csv_files/Items_Data.csv')
+        return pd.read_csv('./Backend Project/csv_files/Items_Data.csv')
 
     def replace_price_premium(self): # Calc the price premium by formula and replace the current values
         retail_prices = self.df['retail_price']
@@ -76,9 +76,9 @@ class predict:
 
         #turn unique names into numerics 
         self.df.sort_values(by=['shoes_name'])
-        self.df.to_csv('./csv_files/half_procc_df.csv', index=False)
+        self.df.to_csv('./Backend Project/csv_files/half_procc_df.csv', index=False)
         self.factorize_2()
-        self.df = pd.read_csv('./csv_files/proccessed_dataframe.csv')
+        self.df = pd.read_csv('./Backend Project/csv_files/proccessed_dataframe.csv')
     
     def factorize_2(self):
         unique_vals = self.df['shoes_name'].unique()
@@ -95,7 +95,7 @@ class predict:
         for i in range(len(self.df['shoes_name'])):
             self.df['shoes_name'].iloc[i] = self.factorize_dict[self.df['shoes_name'].iloc[i]]
         
-        self.df.to_csv('./csv_files/proccessed_dataframe.csv', index=False)
+        self.df.to_csv('./Backend Project/csv_files/proccessed_dataframe.csv', index=False)
 
 ######################################################### Check Correlation  ###########################################################
 
@@ -231,22 +231,3 @@ class predict:
         return rf_y_pred
 
 ######################################################### END OF CLASS  ################################################################
-def fix_dates():
-
-    with open('project_dates/all_dates.txt') as f:
-        all_dates = f.readlines()
-    
-    with open('project_dates/bad_dates.txt') as f:
-        bad_dates = f.readlines()
-    
-    with open('project_dates/fixed_bad_dates.txt') as f:
-        fixed_bad_dates = f.readlines()
-    
-    k = 0
-    for i in bad_dates:
-        if i in all_dates:
-            all_dates[all_dates.index(i)] = fixed_bad_dates[k]
-            k += 1 
-    
-    with open('fixed_dates.txt','w') as f:
-        f.writelines(all_dates)

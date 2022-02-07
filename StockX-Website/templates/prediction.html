@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stockx Website</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/static/styles.css" />
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
@@ -21,7 +21,7 @@
     <!-- NavBar Section  -->
     <nav class="navbar">
       <div class="navbar__container">
-        <a href="/" id="navbar__logo"
+        <a href="http://127.0.0.1:5500/index.html" id="navbar__logo"
           ><i class="far fa-gem"></i>StockX CrawleR</a
         >
         <div class="navbar__toggle" id="moblie-menu">
@@ -31,16 +31,16 @@
         </div>
         <ul class="navbar__menu">
           <li class="navbar__item">
-            <a href="/" class="navbar__links">Home</a>
+            <a href="http://127.0.0.1:5500/templates/index.html" class="navbar__links">Home</a>
           </li>
           <li class="navbar__item">
-            <a href="/data.html" class="navbar__links">Data</a>
+            <a href="http://127.0.0.1:5500/templates/data.html" class="navbar__links">Data</a>
           </li>
           <li class="navbar__item">
-            <a href="/tech.html" class="navbar__links">Tech</a>
+            <a href="http://127.0.0.1:5500/templates/tech.html" class="navbar__links">Tech</a>
           </li>
           <li class="navbar__btn">
-            <a href="/prediction.html" class="button">Prediction</a>
+            <a href="http://127.0.0.1:5001/" class="button">Prediction</a>
           </li>
         </ul>
       </div>
@@ -59,7 +59,7 @@
           <!-- <button class="main__btn"><a href="/prediction.html">Get Started</a></button> -->
         </div>
         <div class="main__img--container">
-          <img src="images/pic2.svg" alt="pic" id="main__img" />
+          <img src="/static/pic2.svg" alt="pic" id="main__img" />
         </div>
       </div>
     </div>
@@ -71,39 +71,26 @@
     <!-- forms under "services" Section -->
     <div class="services">
       <h1>
-        Input desired sneaker URL, Press enter and let the magic happen...
+        Input desired sneaker URL press enter, and let the magic happen...
       </h1>
-        <form action="/get-text" method="POST" >
+        <form name="passdata" action="." method="post">
           <input
-            id="userinput"
-            placeholder="Search.."
+            id="url_input"
+            name="url_input"
+            placeholder="Example: https://stockx.com/nike-dunk-low-georgetown"
             style="height: 80px; font-size: 44pt"
-            type="text"
-            name="input_url"
+            type="url"
             size="50"
             maxlength="500"
-            value="Example: https://stockx.com/nike-dunk-low-georgetown"
-          />
+            required
+            />
+            <button type="reset" size="50">Reset</button>
           
         </form>
     </div>
-
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script type="text/javascript">
-     $(document).ready(function() {
-          $('#quan').keydown(function(event) {
-              if (event.keyCode == 13) {
-                  var url_=$('#quan').val();
-                  alert(url_);
-                  // Use this 'model' variable
-              }
-          });
-     });
-    </script> -->
-    
     </body>
     </html>
     
-    <script src="app.js"></script>
+    <script src="/static/app.js"></script>
   </body>
 </html>

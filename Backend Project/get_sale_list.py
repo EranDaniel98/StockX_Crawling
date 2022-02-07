@@ -214,5 +214,5 @@ class Shoe_data:
         print(row)
         
         df = pd.DataFrame([row])
-        df.to_csv("./csv_files/Items_Data.csv", header=False,index=False, mode='a')
+        df.to_csv("./Backend Project/csv_files/Items_Data.csv", header=False,index=False, mode='a')
         self.clean_var()
